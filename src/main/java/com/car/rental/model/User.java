@@ -1,11 +1,14 @@
 package com.car.rental.model;
 
 import com.car.rental.model.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "USERS")
 @Getter
@@ -27,5 +30,9 @@ public class User {
     @Column(name = "ROLE")
     @NonNull
     public UserRole role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private List<Booking> bookings = new ArrayList<>();
 }
 

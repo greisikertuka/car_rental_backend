@@ -1,10 +1,17 @@
 package com.car.rental.model;
 
+import com.car.rental.model.enums.Brand;
+import com.car.rental.model.enums.Color;
+import com.car.rental.model.enums.FuelType;
+import com.car.rental.model.enums.Transmission;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,11 +26,44 @@ public class Car {
     @NonNull
     public String model;
 
+    @Column(name = "BRAND")
+    @NonNull
+    public Brand brand;
+
+    @Column(name = "ENGINE")
+    @NonNull
+    public String engine;
+
+    @Column(name = "FUEL_TYPE")
+    @NonNull
+    public FuelType fuelType;
+
+    @Column(name = "DOORS")
+    @NonNull
+    public int doors;
+
+    @Column(name = "COLOR")
+    @NonNull
+    public Color color;
+
+    @Column(name = "TRANSMISSION")
+    @NonNull
+    public Transmission transmission;
+
+    @Column(name = "SEATS")
+    @NonNull
+    public int seats;
+
     @Column(name = "YEAR")
     @NonNull
     public int year;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "OWNER_ID", nullable = false)
-    private Owner owner;
+    @Column(name = "LICENSE_PLATE")
+    @NonNull
+    public String licencePlate;
+
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("car")
+    private List<Booking> bookings = new ArrayList<>();
 }
+
