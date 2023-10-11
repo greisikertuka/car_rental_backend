@@ -1,7 +1,7 @@
 package com.car.rental.model;
 
 import com.car.rental.model.enums.UserRole;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -29,10 +29,11 @@ public class User {
 
     @Column(name = "ROLE")
     @NonNull
+    @Enumerated(EnumType.STRING)
     public UserRole role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("user")
+    @JsonIgnore
     private List<Booking> bookings = new ArrayList<>();
 }
 

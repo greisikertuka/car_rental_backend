@@ -1,5 +1,6 @@
 package com.car.rental.model.enums;
 
+
 public enum FuelType {
     ELECTRIC("ELECTRIC"),
     GAS("GAS"),
@@ -17,4 +18,3 @@ public enum FuelType {
         return fuelType;
     }
 }
-

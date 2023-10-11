@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
-    <artifactId>car-wash-backend</artifactId>
+    <artifactId>car_rental_backend</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
         <compiler-plugin.version>3.10.1</compiler-plugin.version>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>9.16.0</version>
+            <version>9.22.2</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>

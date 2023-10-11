@@ -17,10 +17,6 @@ public class Booking {
     @NonNull
     public Long id;
 
-    @Column(name = "USER_ID")
-    @NonNull
-    public String userId;
-
     @Column(name = "START_DATE")
     @NonNull
     public Date startDate;

@@ -4,7 +4,7 @@ import com.car.rental.model.enums.Brand;
 import com.car.rental.model.enums.Color;
 import com.car.rental.model.enums.FuelType;
 import com.car.rental.model.enums.Transmission;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -28,6 +28,7 @@ public class Car {
 
     @Column(name = "BRAND")
     @NonNull
+    @Enumerated(EnumType.STRING)
     public Brand brand;
 
     @Column(name = "ENGINE")
@@ -36,6 +37,7 @@ public class Car {
 
     @Column(name = "FUEL_TYPE")
     @NonNull
+    @Enumerated(EnumType.STRING)
     public FuelType fuelType;
 
     @Column(name = "DOORS")
@@ -44,10 +46,12 @@ public class Car {
 
     @Column(name = "COLOR")
     @NonNull
+    @Enumerated(EnumType.STRING)
     public Color color;
 
     @Column(name = "TRANSMISSION")
     @NonNull
+    @Enumerated(EnumType.STRING)
     public Transmission transmission;
 
     @Column(name = "SEATS")
@@ -63,7 +67,7 @@ public class Car {
     public String licencePlate;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("car")
+    @JsonIgnore
     private List<Booking> bookings = new ArrayList<>();
 }
 
