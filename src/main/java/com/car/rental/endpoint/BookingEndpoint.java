@@ -38,21 +38,21 @@ public class BookingEndpoint {
     }
 
     @POST
-    @Path("create")
+    @Path("/create")
     public Response insert(@QueryParam("carId") Long carId, @QueryParam("userId") Long userId, Booking booking) {
         bookingService.insertBooking(userId, carId, booking);
         return Response.status(201).build();
     }
 
     @PUT
-    @Path("update")
+    @Path("/update")
     public Response update(Booking booking) {
         bookingService.updateBooking(booking);
         return Response.status(201).build();
     }
 
     @DELETE
-    @Path("{id}")
+    @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
         bookingService.deleteBooking(id);
         return Response.status(201).build();

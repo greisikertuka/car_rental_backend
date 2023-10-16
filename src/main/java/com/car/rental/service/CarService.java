@@ -35,4 +35,8 @@ public class CarService {
     public List<Car> findAllCars() {
         return carRepository.listAll();
     }
+
+    public Car findCarById(Long id) {
+        return carRepository.findById(id);
+    }
 }

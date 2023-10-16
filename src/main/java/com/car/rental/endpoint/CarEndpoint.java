@@ -23,22 +23,29 @@ public class CarEndpoint {
         return Response.status(200).entity(response).build();
     }
 
+    @GET
+    @Path("/get/{id}")
+    public Response getCarById(@PathParam("id") Long id) {
+        var response = carService.findCarById(id);
+        return Response.status(200).entity(response).build();
+    }
+
     @POST
-    @Path("create")
+    @Path("/create")
     public Response insert(Car car) {
         carService.insertCar(car);
         return Response.status(201).build();
     }
 
     @PUT
-    @Path("update")
+    @Path("/update")
     public Response update(Car car) {
         carService.updateCar(car);
         return Response.status(201).build();
     }
 
     @DELETE
-    @Path("{id}")
+    @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
         carService.deleteCar(id);
         return Response.status(201).build();
