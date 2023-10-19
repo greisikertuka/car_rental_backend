@@ -9,17 +9,17 @@ import java.util.Date;
 
 @Getter
 @Setter
-@Entity(name = "BOOKINGS")
-public class Booking {
+@Entity(name = "RATINGS")
+public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @Column(name = "START_DATE")
-    public Date startDate;
+    @Column(name = "RATING")
+    public int rating;
 
-    @Column(name = "END_DATE")
-    public Date endDate;
+    @Column(name = "COMMENT")
+    public String comment;
 
     @Column(name = "TIMESTAMP")
     public Date timeStamp;
@@ -33,7 +33,7 @@ public class Booking {
     private User user;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "RATING_ID", referencedColumnName = "ID")
-    public Rating rating;
+    @JoinColumn(name = "BOOKING_ID", referencedColumnName = "ID")
+    public Booking booking;
 }
 
