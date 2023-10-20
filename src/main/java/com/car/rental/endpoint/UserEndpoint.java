@@ -3,6 +3,10 @@ package com.car.rental.endpoint;
 import com.car.rental.model.LoginRequest;
 import com.car.rental.model.User;
 import com.car.rental.repository.UserRepository;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.inject.Inject;
@@ -23,8 +27,14 @@ public class UserEndpoint {
     @Inject
     UserRepository userRepository;
 
+
     @POST
     @Path("/login")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "Login successful", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+            @APIResponse(responseCode = "401", description = "The user does not exist!"),
+            @APIResponse(responseCode = "401", description = "Please check your password!")
+    })
     public Response login(LoginRequest loginRequest) {
         // Find the user by username
         Optional<User> optionalUser = userRepository.findByUsername(loginRequest.getUsername());
@@ -46,6 +56,10 @@ public class UserEndpoint {
 
     @POST
     @Path("/signUp")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "Login successful", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+            @APIResponse(responseCode = "409", description = "This username already exists!"),
+    })
     @Transactional
     public Response signUp(User user) {
         // Find the user by username
@@ -58,4 +72,5 @@ public class UserEndpoint {
         userRepository.persist(user);
         return Response.ok().entity(user).build();
     }
+
 }

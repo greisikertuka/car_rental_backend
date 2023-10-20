@@ -82,4 +82,8 @@ public class RatingService {
     public List<Rating> findAllRatings() {
         return ratingRepository.listAll();
     }
+
+    public Rating findById(Long id) {
+        return ratingRepository.findById(id);
+    }
 }
