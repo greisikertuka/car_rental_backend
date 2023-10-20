@@ -24,6 +24,10 @@ public class Booking {
     @Column(name = "TIMESTAMP")
     public Date timeStamp;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "RATING_ID", referencedColumnName = "ID")
+    public Rating rating;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CAR_ID", nullable = false)
     private Car car;
@@ -31,9 +35,5 @@ public class Booking {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "RATING_ID", referencedColumnName = "ID")
-    public Rating rating;
 }
 

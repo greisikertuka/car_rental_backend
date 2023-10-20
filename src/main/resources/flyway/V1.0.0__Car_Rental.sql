@@ -26,21 +26,21 @@ create table BOOKINGS
     START_DATE date not null,
     END_DATE   date not null,
     TIMESTAMP  date not null,
+    RATING_ID  int  not null,
     CAR_ID     int  not null,
     USER_ID    int  not null,
+    foreign key (RATING_ID) references RATINGS (ID) on delete cascade,
     constraint FK_CARS foreign key (CAR_ID) references CARS (ID),
     constraint FK_USERS foreign key (USER_ID) references USERS (ID)
 );
 create table RATINGS
 (
-    ID         serial primary key,
-    RATING     int  not null,
-    COMMENT    text not null,
-    TIMESTAMP  date not null,
-    CAR_ID     int  not null,
-    USER_ID    int  not null,
-    BOOKING_ID int  not null,
-    foreign key (BOOKING_ID) references BOOKINGS (ID) on delete cascade,
+    ID        serial primary key,
+    RATING    int  not null,
+    COMMENT   text not null,
+    TIMESTAMP date not null,
+    CAR_ID    int  not null,
+    USER_ID   int  not null,
     constraint FK_CARS foreign key (CAR_ID) references CARS (ID),
     constraint FK_USERS foreign key (USER_ID) references USERS (ID)
 );

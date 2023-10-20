@@ -31,9 +31,5 @@ public class Rating {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "BOOKING_ID", referencedColumnName = "ID")
-    public Booking booking;
 }
 
