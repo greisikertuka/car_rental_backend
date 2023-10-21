@@ -63,9 +63,14 @@ public class RatingService {
         if (booking == null) {
             throw new NotFoundException();
         }
-        booking.setRating(rating);
+        car.getBookings().remove(booking);
         booking.setUser(user);
         booking.setCar(car);
+        booking.setRating(rating);
+        car.getBookings().add(booking);
+        car.setAverageRating((car.getAverageRating() * car.getReviewsCount() + rating.getRating()) / (car.reviewsCount + 1));
+        car.setReviewsCount(car.getReviewsCount() + 1);
+        carRepository.getEntityManager().merge(booking);
         bookingRepository.getEntityManager().merge(booking);
     }
 

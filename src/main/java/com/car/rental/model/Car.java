@@ -57,6 +57,12 @@ public class Car {
     @Column(name = "PRICE")
     public double price;
 
+    @Column(name = "AVERAGE_RATING")
+    public double averageRating;
+
+    @Column(name = "REVIEWS_COUNT")
+    public int reviewsCount;
+
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Booking> bookings = new ArrayList<>();

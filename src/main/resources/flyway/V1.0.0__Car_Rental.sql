@@ -1,17 +1,19 @@
 create table CARS
 (
-    ID            serial primary key,
-    MODEL         varchar(100) not null,
-    BRAND         varchar(50)  not null,
-    ENGINE        varchar(50)  not null,
-    FUEL_TYPE     varchar(50)  not null,
-    DOORS         int          not null,
-    COLOR         varchar(50)  not null,
-    TRANSMISSION  varchar(50)  not null,
-    SEATS         int          not null,
-    YEAR          int          not null,
-    LICENSE_PLATE varchar(50)  not null,
-    PRICE         float        not null
+    ID             serial primary key,
+    MODEL          varchar(100) not null,
+    BRAND          varchar(50)  not null,
+    ENGINE         varchar(50)  not null,
+    FUEL_TYPE      varchar(50)  not null,
+    DOORS          int          not null,
+    COLOR          varchar(50)  not null,
+    TRANSMISSION   varchar(50)  not null,
+    SEATS          int          not null,
+    YEAR           int          not null,
+    LICENSE_PLATE  varchar(50)  not null,
+    PRICE          float        not null,
+    AVERAGE_RATING float        not null,
+    REVIEWS_COUNT  int          not null
 );
 create table USERS
 (
