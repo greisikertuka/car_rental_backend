@@ -22,14 +22,7 @@ public class CarEndpoint {
     CarService carService;
 
     @GET
-    @APIResponse(
-            responseCode = "200",
-            description = "List of cars found",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = SchemaType.ARRAY, implementation = Car.class)
-            )
-    )
+    @APIResponse(responseCode = "200", description = "List of cars found", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = Car.class)))
     @Path("/all")
     public Response getAllCars() {
         var response = carService.findAllCars();
@@ -44,7 +37,7 @@ public class CarEndpoint {
     @Path("/get/{id}")
     @APIResponses({
             @APIResponse(responseCode = "200", description = "Car found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class))),
-            @APIResponse(responseCode = "404", description = "Car not found")
+            @APIResponse(responseCode = "404", description = "Car not found", content = @Content(mediaType = "text/plain"))
     })
     public Response getCarById(@PathParam("id") Long id) {
         var response = carService.findCarById(id);

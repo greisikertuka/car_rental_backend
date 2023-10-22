@@ -23,14 +23,7 @@ public class BookingEndpoint {
 
     @GET
     @Path("/all")
-    @APIResponse(
-            responseCode = "200",
-            description = "List of bookings found",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = SchemaType.ARRAY, implementation = Booking.class)
-            )
-    )
+    @APIResponse(responseCode = "200", description = "List of bookings found", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = Booking.class)))
     public Response getAllBookings() {
         var response = bookingService.findAllBookings();
         if (response != null) {
@@ -42,14 +35,10 @@ public class BookingEndpoint {
 
     @GET
     @Path("/user/{userId}")
-    @APIResponse(
-            responseCode = "200",
-            description = "List of bookings found for a user",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = SchemaType.ARRAY, implementation = Booking.class)
-            )
-    )
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "List of bookings found for an user", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = Booking.class))),
+            @APIResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "text/plain"))
+    })
     public Response getBookingsByUserId(@PathParam("userId") Long userId) {
         var response = bookingService.findBookingsByUserId(userId);
         if (response != null) {
@@ -61,14 +50,10 @@ public class BookingEndpoint {
 
     @GET
     @Path("/car/{carId}")
-    @APIResponse(
-            responseCode = "200",
-            description = "List of bookings found for a car",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = SchemaType.ARRAY, implementation = Booking.class)
-            )
-    )
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "List of bookings found for a car", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = Booking.class))),
+            @APIResponse(responseCode = "404", description = "Car not found", content = @Content(mediaType = "text/plain"))
+    })
     public Response getBookingsByCarId(@PathParam("carId") Long carId) {
         var response = bookingService.findBookingsByCarId(carId);
 
@@ -104,7 +89,7 @@ public class BookingEndpoint {
     @Path("/get/{id}")
     @APIResponses({
             @APIResponse(responseCode = "200", description = "Booking found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Booking.class))),
-            @APIResponse(responseCode = "404", description = "Booking not found")
+            @APIResponse(responseCode = "404", description = "Booking not found", content = @Content(mediaType = "text/plain"))
     })
     public Response getBookingById(@PathParam("id") Long id) {
         var response = bookingService.getBookingById(id);

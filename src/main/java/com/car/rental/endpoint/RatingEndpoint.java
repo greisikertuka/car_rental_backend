@@ -24,14 +24,7 @@ public class RatingEndpoint {
 
     @GET
     @Path("/all")
-    @APIResponse(
-            responseCode = "200",
-            description = "List of ratings found",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = SchemaType.ARRAY, implementation = Rating.class)
-            )
-    )
+    @APIResponse(responseCode = "200", description = "List of ratings found", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = Rating.class)))
     public Response getAllRatings() {
         var response = ratingService.findAllRatings();
 
@@ -44,14 +37,10 @@ public class RatingEndpoint {
 
     @GET
     @Path("/user/{userId}")
-    @APIResponse(
-            responseCode = "200",
-            description = "List of ratings found for a user",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = SchemaType.ARRAY, implementation = Rating.class)
-            )
-    )
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "List of ratings found for an user", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = Rating.class))),
+            @APIResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "text/plain"))
+    })
     public Response getRatingsByUserId(@PathParam("userId") Long userId) {
         var response = ratingService.findRatingsByUserId(userId);
         return Response.status(200).entity(response).build();
@@ -59,14 +48,10 @@ public class RatingEndpoint {
 
     @GET
     @Path("/car/{carId}")
-    @APIResponse(
-            responseCode = "200",
-            description = "List of ratings found for a car",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(type = SchemaType.ARRAY, implementation = Rating.class)
-            )
-    )
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "List of ratings found for a car", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = Rating.class))),
+            @APIResponse(responseCode = "404", description = "Car not found", content = @Content(mediaType = "text/plain"))
+    })
     public Response getRatingsByCarId(@PathParam("carId") Long carId) {
         var response = ratingService.findRatingsByCarId(carId);
         return Response.status(200).entity(response).build();
@@ -76,7 +61,7 @@ public class RatingEndpoint {
     @Path("/get/{id}")
     @APIResponses({
             @APIResponse(responseCode = "200", description = "Rating found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class))),
-            @APIResponse(responseCode = "404", description = "Rating not found")
+            @APIResponse(responseCode = "404", description = "Rating not found", content = @Content(mediaType = "text/plain"))
     })
     public Response getRatingById(@PathParam("id") Long id) {
         var response = ratingService.findById(id);

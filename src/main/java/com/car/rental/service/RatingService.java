@@ -70,8 +70,7 @@ public class RatingService {
         car.getBookings().add(booking);
         car.setAverageRating((car.getAverageRating() * car.getReviewsCount() + rating.getRating()) / (car.reviewsCount + 1));
         car.setReviewsCount(car.getReviewsCount() + 1);
-        carRepository.getEntityManager().merge(booking);
-        bookingRepository.getEntityManager().merge(booking);
+        carRepository.getEntityManager().merge(car);
     }
 
     @Transactional
