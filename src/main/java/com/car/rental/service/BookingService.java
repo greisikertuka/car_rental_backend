@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @ApplicationScoped

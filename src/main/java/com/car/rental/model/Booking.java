@@ -1,5 +1,6 @@
 package com.car.rental.model;
 
+import com.car.rental.model.enums.BookingStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,6 +28,10 @@ public class Booking {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "RATING_ID", referencedColumnName = "ID")
     public Rating rating;
+
+    @Column(name = "STATUS")
+    @Enumerated(EnumType.STRING)
+    public BookingStatus bookingStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CAR_ID", nullable = false)
