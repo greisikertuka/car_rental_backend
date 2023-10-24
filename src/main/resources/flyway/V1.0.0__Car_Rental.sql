@@ -12,37 +12,42 @@ create table CARS
     YEAR           int          not null,
     LICENSE_PLATE  varchar(50)  not null,
     PRICE          float        not null,
-    AVERAGE_RATING float        not null,
-    REVIEWS_COUNT  int          not null
+    AVERAGE_RATING float,
+    REVIEWS_COUNT  int
 );
 create table USERS
 (
-    ID       serial primary key,
-    USERNAME varchar(100) not null,
-    PASSWORD varchar(100) not null,
-    ROLE     varchar(50)  not null
-);
-create table BOOKINGS
-(
-    ID         serial primary key,
-    START_DATE date not null,
-    END_DATE   date not null,
-    TIMESTAMP  date not null,
-    RATING_ID  int  not null,
-    CAR_ID     int  not null,
-    USER_ID    int  not null,
-    foreign key (RATING_ID) references RATINGS (ID) on delete cascade,
-    constraint FK_CARS foreign key (CAR_ID) references CARS (ID),
-    constraint FK_USERS foreign key (USER_ID) references USERS (ID)
+    ID        serial primary key,
+    NAME      varchar(100) not null,
+    LAST_NAME varchar(100) not null,
+    EMAIL     varchar(100) not null,
+    PHONE     varchar(100) not null,
+    USERNAME  varchar(100) not null,
+    PASSWORD  varchar(200) not null,
+    ROLE      varchar(50)  not null
 );
 create table RATINGS
 (
     ID        serial primary key,
     RATING    int  not null,
-    COMMENT   text not null,
+    COMMENT   text,
     TIMESTAMP date not null,
     CAR_ID    int  not null,
     USER_ID   int  not null,
+    constraint FK_CARS foreign key (CAR_ID) references CARS (ID),
+    constraint FK_USERS foreign key (USER_ID) references USERS (ID)
+);
+create table BOOKINGS
+(
+    ID         serial primary key,
+    START_DATE date         not null,
+    END_DATE   date         not null,
+    TIMESTAMP  date         not null,
+    STATUS     varchar(100) not null,
+    RATING_ID  int,
+    CAR_ID     int          not null,
+    USER_ID    int          not null,
+    foreign key (RATING_ID) references RATINGS (ID) on delete cascade,
     constraint FK_CARS foreign key (CAR_ID) references CARS (ID),
     constraint FK_USERS foreign key (USER_ID) references USERS (ID)
 );

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,25 +19,32 @@ public class User {
     public Long id;
 
     @Column(name = "NAME")
+    @NotNull
     public String name;
 
     @Column(name = "LAST_NAME")
+    @NotNull
     public String lastName;
 
     @Column(name = "EMAIL")
+    @NotNull
     public String email;
 
     @Column(name = "PHONE")
+    @NotNull
     public String phone;
 
     @Column(name = "USERNAME")
+    @NotNull
     public String username;
 
     @Column(name = "PASSWORD")
+    @NotNull
     public String password;
 
     @Column(name = "ROLE")
     @Enumerated(EnumType.STRING)
+    @NotNull
     public UserRole role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

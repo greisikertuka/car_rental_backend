@@ -2,6 +2,7 @@ package com.car.rental.endpoint;
 
 import com.car.rental.model.LoginRequest;
 import com.car.rental.model.User;
+import com.car.rental.model.enums.UserRole;
 import com.car.rental.repository.UserRepository;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -47,12 +48,12 @@ public class UserEndpoint {
                 user.setPassword(null);
                 return Response.ok().entity(user).build();
             } else {
-                Response.status(Response.Status.UNAUTHORIZED).entity("Please check your password!").build();
+                return Response.status(Response.Status.UNAUTHORIZED).entity("Please check your password!").build();
             }
         }
 
         // Failed login
-        return Response.status(Response.Status.UNAUTHORIZED).entity("The user does not exist!").build();
+        return Response.status(Response.Status.NOT_FOUND).entity("The user does not exist!").build();
     }
 
     @POST
@@ -70,8 +71,17 @@ public class UserEndpoint {
             return Response.status(Response.Status.CONFLICT).entity("This username already exists!").build();
         }
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+        user.setRole(UserRole.USER);
         userRepository.persist(user);
-        return Response.ok().entity(user).build();
+        var newUser = new User();
+        newUser.setEmail(user.email);
+        newUser.setName(user.getName());
+        newUser.setLastName(user.getLastName());
+        newUser.setPhone(user.getPhone());
+        newUser.setId(user.id);
+        newUser.setUsername(user.getUsername());
+        newUser.setRole(UserRole.USER);
+        return Response.ok().entity(newUser).build();
     }
 
 }

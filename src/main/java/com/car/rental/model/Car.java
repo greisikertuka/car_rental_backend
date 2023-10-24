@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,40 +22,51 @@ public class Car {
     public Long id;
 
     @Column(name = "MODEL")
+    @NotNull
     public String model;
 
     @Column(name = "BRAND")
     @Enumerated(EnumType.STRING)
+    @NotNull
     public Brand brand;
 
     @Column(name = "ENGINE")
+    @NotNull
     public String engine;
 
     @Column(name = "FUEL_TYPE")
     @Enumerated(EnumType.STRING)
+    @NotNull
     public FuelType fuelType;
 
     @Column(name = "DOORS")
+    @NotNull
     public int doors;
 
     @Column(name = "COLOR")
     @Enumerated(EnumType.STRING)
+    @NotNull
     public Color color;
 
     @Column(name = "TRANSMISSION")
     @Enumerated(EnumType.STRING)
+    @NotNull
     public Transmission transmission;
 
     @Column(name = "SEATS")
+    @NotNull
     public int seats;
 
     @Column(name = "YEAR")
+    @NotNull
     public int year;
 
     @Column(name = "LICENSE_PLATE")
+    @NotNull
     public String licencePlate;
 
     @Column(name = "PRICE")
+    @NotNull
     public double price;
 
     @Column(name = "AVERAGE_RATING")
