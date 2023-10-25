@@ -34,6 +34,10 @@ public class Booking {
     @NotNull
     public BookingStatus bookingStatus;
 
+    @Column(name = "TOTAL")
+    @NotNull
+    public float total;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "RATING_ID", referencedColumnName = "ID")
     public Rating rating;

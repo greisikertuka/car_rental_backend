@@ -44,6 +44,7 @@ create table BOOKINGS
     END_DATE   date         not null,
     TIMESTAMP  date         not null,
     STATUS     varchar(100) not null,
+    TOTAL      float        not null,
     RATING_ID  int,
     CAR_ID     int          not null,
     USER_ID    int          not null,
