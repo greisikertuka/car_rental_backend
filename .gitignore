@@ -43,4 +43,4 @@ nb-configuration.xml
 /.quarkus/cli/plugins/
 
 # Documentation
-src/main/java/com/car/rental/documentation/
+documentation/
