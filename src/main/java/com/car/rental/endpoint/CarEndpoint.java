@@ -2,12 +2,14 @@ package com.car.rental.endpoint;
 
 import com.car.rental.model.Car;
 import com.car.rental.service.CarService;
+import com.car.rental.utils.Role;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -48,6 +50,7 @@ public class CarEndpoint {
         }
     }
 
+    @RolesAllowed({Role.ADMIN})
     @POST
     @Path("/create")
     public Response insert(Car car) {
@@ -55,6 +58,7 @@ public class CarEndpoint {
         return Response.status(201).build();
     }
 
+    @RolesAllowed({Role.ADMIN})
     @PUT
     @Path("/update")
     public Response update(Car car) {
@@ -62,6 +66,7 @@ public class CarEndpoint {
         return Response.status(201).build();
     }
 
+    @RolesAllowed({Role.ADMIN})
     @DELETE
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {

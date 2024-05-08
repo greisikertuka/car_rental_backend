@@ -2,12 +2,14 @@ package com.car.rental.endpoint;
 
 import com.car.rental.model.Booking;
 import com.car.rental.service.BookingService;
+import com.car.rental.utils.Role;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -21,6 +23,7 @@ public class BookingEndpoint {
     @Inject
     BookingService bookingService;
 
+    @RolesAllowed({Role.ADMIN})
     @GET
     @Path("/all")
     @APIResponse(responseCode = "200", description = "List of bookings found", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = Booking.class)))
@@ -33,6 +36,7 @@ public class BookingEndpoint {
         }
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @GET
     @Path("/user/{userId}")
     @APIResponses({
@@ -48,6 +52,7 @@ public class BookingEndpoint {
         }
     }
 
+    @RolesAllowed({Role.ADMIN})
     @GET
     @Path("/car/{carId}")
     @APIResponses({
@@ -64,6 +69,7 @@ public class BookingEndpoint {
         }
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @POST
     @Path("/create")
     public Response insert(@QueryParam("carId") Long carId, @QueryParam("userId") Long userId, Booking booking) {
@@ -71,6 +77,7 @@ public class BookingEndpoint {
         return Response.status(201).build();
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @PUT
     @Path("/update")
     public Response update(Booking booking) {
@@ -78,6 +85,7 @@ public class BookingEndpoint {
         return Response.status(201).build();
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
@@ -85,6 +93,7 @@ public class BookingEndpoint {
         return Response.status(201).build();
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @GET
     @Path("/get/{id}")
     @APIResponses({

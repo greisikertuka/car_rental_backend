@@ -3,12 +3,14 @@ package com.car.rental.endpoint;
 import com.car.rental.model.Car;
 import com.car.rental.model.Rating;
 import com.car.rental.service.RatingService;
+import com.car.rental.utils.Role;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -22,6 +24,7 @@ public class RatingEndpoint {
     @Inject
     RatingService ratingService;
 
+    @RolesAllowed({Role.ADMIN})
     @GET
     @Path("/all")
     @APIResponse(responseCode = "200", description = "List of ratings found", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = Rating.class)))
@@ -35,6 +38,7 @@ public class RatingEndpoint {
         }
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @GET
     @Path("/user/{userId}")
     @APIResponses({
@@ -46,6 +50,7 @@ public class RatingEndpoint {
         return Response.status(200).entity(response).build();
     }
 
+    @RolesAllowed({Role.ADMIN})
     @GET
     @Path("/car/{carId}")
     @APIResponses({
@@ -57,6 +62,7 @@ public class RatingEndpoint {
         return Response.status(200).entity(response).build();
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @GET
     @Path("/get/{id}")
     @APIResponses({
@@ -72,6 +78,7 @@ public class RatingEndpoint {
         }
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @POST
     @Path("/create")
     public Response insert(@QueryParam("bookingId") Long bookingId, @QueryParam("carId") Long carId, @QueryParam("userId") Long userId, Rating rating) {
@@ -79,6 +86,7 @@ public class RatingEndpoint {
         return Response.status(201).build();
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @PUT
     @Path("/update")
     public Response update(Rating rating) {
@@ -86,6 +94,7 @@ public class RatingEndpoint {
         return Response.status(201).build();
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {

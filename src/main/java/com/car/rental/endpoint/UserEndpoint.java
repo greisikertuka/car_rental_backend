@@ -1,9 +1,11 @@
 package com.car.rental.endpoint;
 
 import com.car.rental.model.LoginRequest;
+import com.car.rental.model.LoginResponse;
 import com.car.rental.model.User;
-import com.car.rental.model.enums.UserRole;
+import com.car.rental.model.enums.Role;
 import com.car.rental.repository.UserRepository;
+import com.car.rental.utils.TokenService;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
@@ -29,12 +31,16 @@ public class UserEndpoint {
     UserRepository userRepository;
 
 
+    @Inject
+    TokenService tokenService;
+
+
     @POST
     @Path("/login")
     @APIResponses({
-            @APIResponse(responseCode = "200", description = "Login successful!", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
-            @APIResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "text/plain")),
-            @APIResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "text/plain")),
+            @APIResponse(responseCode = "200", description = "Login successful!", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = LoginResponse.class))),
+            @APIResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = MediaType.TEXT_PLAIN)),
+            @APIResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = MediaType.TEXT_PLAIN)),
     })
     public Response login(LoginRequest loginRequest) {
         // Find the user by username
@@ -45,8 +51,8 @@ public class UserEndpoint {
 
             // Verify the password using BCrypt
             if (BCrypt.checkpw(loginRequest.getPassword(), user.getPassword())) {
-                user.setPassword(null);
-                return Response.ok().entity(user).build();
+                String token = generateJwtToken(user);
+                return Response.ok(new LoginResponse(token)).build();
             } else {
                 return Response.status(Response.Status.UNAUTHORIZED).entity("Please check your password!").build();
             }
@@ -56,10 +62,14 @@ public class UserEndpoint {
         return Response.status(Response.Status.NOT_FOUND).entity("The user does not exist!").build();
     }
 
+    private String generateJwtToken(User user) {
+        return tokenService.generateUserToken(user);
+    }
+
     @POST
     @Path("/signUp")
     @APIResponses({
-            @APIResponse(responseCode = "200", description = "Login successful", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+            @APIResponse(responseCode = "201", description = "Login successful", content = @Content(mediaType = "text/plain")),
             @APIResponse(responseCode = "409", description = "This username already exists!", content = @Content(mediaType = "text/plain")),
     })
     @Transactional
@@ -71,17 +81,9 @@ public class UserEndpoint {
             return Response.status(Response.Status.CONFLICT).entity("This username already exists!").build();
         }
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-        user.setRole(UserRole.USER);
+        user.setRole(Role.USER);
         userRepository.persist(user);
-        var newUser = new User();
-        newUser.setEmail(user.email);
-        newUser.setName(user.getName());
-        newUser.setLastName(user.getLastName());
-        newUser.setPhone(user.getPhone());
-        newUser.setId(user.id);
-        newUser.setUsername(user.getUsername());
-        newUser.setRole(UserRole.USER);
-        return Response.ok().entity(newUser).build();
+        return Response.status(Response.Status.CREATED).entity("Created user successfully!").build();
     }
 
 }
