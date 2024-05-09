@@ -69,7 +69,7 @@ public class UserEndpoint {
     @POST
     @Path("/signUp")
     @APIResponses({
-            @APIResponse(responseCode = "201", description = "Login successful", content = @Content(mediaType = "text/plain")),
+            @APIResponse(responseCode = "201", description = "Sign up successful", content = @Content(mediaType = "text/plain")),
             @APIResponse(responseCode = "409", description = "This username already exists!", content = @Content(mediaType = "text/plain")),
     })
     @Transactional

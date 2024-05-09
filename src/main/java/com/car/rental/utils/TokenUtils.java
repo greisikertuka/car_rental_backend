@@ -12,6 +12,7 @@ import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Map;
 
 public class TokenUtils {
@@ -30,11 +31,11 @@ public class TokenUtils {
 
         claims.setIssuedAt(NumericDate.fromSeconds(currentTimeInSecs));
         claims.setClaim(Claims.auth_time.name(), NumericDate.fromSeconds(currentTimeInSecs));
+        claims.setStringListClaim(Claims.groups.name(), Collections.singletonList(claims.getClaimValueAsString("role")));
 
         for (Map.Entry<String, Object> entry : claims.getClaimsMap().entrySet()) {
             System.out.printf("\tAdded claim: %s, value: %s\n", entry.getKey(), entry.getValue());
         }
-
         JsonWebSignature jws = new JsonWebSignature();
         jws.setPayload(claims.toJson());
         jws.setKey(privateKey);
