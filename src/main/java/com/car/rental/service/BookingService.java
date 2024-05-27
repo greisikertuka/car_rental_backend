@@ -38,6 +38,7 @@ public class BookingService {
         if (user == null) {
             throw new NotFoundException();
         }
+        user.setPassword("");
         return user.getBookings();
     }
 

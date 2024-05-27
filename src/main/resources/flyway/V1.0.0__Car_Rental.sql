@@ -40,6 +40,10 @@ create table RATINGS
 create table BOOKINGS
 (
     ID         serial primary key,
+    NAME      varchar(50) not null,
+    LAST_NAME varchar(50) not null,
+    EMAIL     varchar(50) not null,
+    PHONE     varchar(50) not null,
     START_DATE date         not null,
     END_DATE   date         not null,
     TIMESTAMP  date         not null,

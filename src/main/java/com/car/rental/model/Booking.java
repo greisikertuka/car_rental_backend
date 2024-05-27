@@ -17,6 +17,22 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
+    @Column(name = "NAME")
+    @NotNull
+    public String name;
+
+    @Column(name = "LAST_NAME")
+    @NotNull
+    public String lastName;
+
+    @Column(name = "EMAIL")
+    @NotNull
+    public String email;
+
+    @Column(name = "PHONE")
+    @NotNull
+    public String phone;
+
     @Column(name = "START_DATE")
     @NotNull
     public Date startDate;

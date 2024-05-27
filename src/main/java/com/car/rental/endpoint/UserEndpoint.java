@@ -5,19 +5,19 @@ import com.car.rental.model.LoginResponse;
 import com.car.rental.model.User;
 import com.car.rental.model.enums.Role;
 import com.car.rental.repository.UserRepository;
+import com.car.rental.service.UserService;
 import com.car.rental.utils.TokenService;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.mindrot.jbcrypt.BCrypt;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
@@ -30,9 +30,10 @@ public class UserEndpoint {
     @Inject
     UserRepository userRepository;
 
-
     @Inject
     TokenService tokenService;
+    @Inject
+    UserService userService;
 
 
     @POST
@@ -69,7 +70,7 @@ public class UserEndpoint {
     @POST
     @Path("/signUp")
     @APIResponses({
-            @APIResponse(responseCode = "201", description = "Sign up successful", content = @Content(mediaType = "text/plain")),
+            @APIResponse(responseCode = "201", description = "Sign up successful", content = @Content(mediaType = "application/json")),
             @APIResponse(responseCode = "409", description = "This username already exists!", content = @Content(mediaType = "text/plain")),
     })
     @Transactional
@@ -83,7 +84,74 @@ public class UserEndpoint {
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         user.setRole(Role.USER);
         userRepository.persist(user);
-        return Response.status(Response.Status.CREATED).entity("Created user successfully!").build();
+        return Response.status(Response.Status.CREATED).entity("{\"message\": \"Created user successfully!\"}").build();
     }
 
+    @RolesAllowed({com.car.rental.utils.Role.USER, com.car.rental.utils.Role.ADMIN})
+    @PUT
+    @Path("/updateOwnProfile")
+    @APIResponses({
+            @APIResponse(responseCode = "204", description = "Edited profile successfully!", content = @Content(mediaType = "application/json")),
+            @APIResponse(responseCode = "409", description = "User with selected username exists!", content = @Content(mediaType = "text/plain"))
+    })
+    public Response updateProfile(User user) {
+        return userService.getUpdateProfileResponse(user);
+    }
+
+    @RolesAllowed({com.car.rental.utils.Role.ADMIN})
+    @PUT
+    @Path("/update")
+    @APIResponses({
+            @APIResponse(responseCode = "204", description = "Edited profile successfully!", content = @Content(mediaType = "application/json")),
+            @APIResponse(responseCode = "409", description = "User with selected username exists!", content = @Content(mediaType = "text/plain"))
+    })
+    public Response updateUser(User user) {
+        userService.updateUser(user);
+        return Response.status(201).build();
+    }
+
+    @RolesAllowed({com.car.rental.utils.Role.ADMIN})
+    @GET
+    @APIResponse(responseCode = "200", description = "List of users found", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = User.class)))
+    @Path("/all")
+    public Response getAllUsers() {
+        var response = userService.findAllUsers();
+        if (response != null) {
+            return Response.status(200).entity(response).build();
+        } else {
+            return Response.status(404).build();
+        }
+    }
+
+    @RolesAllowed({com.car.rental.utils.Role.ADMIN})
+    @DELETE
+    @Path("/delete/{id}")
+    public Response delete(@PathParam("id") Long id) {
+        userService.deleteUser(id);
+        return Response.status(201).build();
+    }
+
+    @RolesAllowed({com.car.rental.utils.Role.ADMIN})
+    @POST
+    @Path("/create")
+    public Response create(User user) {
+        userService.insertUser(user);
+        return Response.status(201).build();
+    }
+
+    @GET
+    @Path("/get/{id}")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "User found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+            @APIResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "text/plain"))
+    })
+    public Response getCarById(@PathParam("id") Long id) {
+        var user = userService.findUserById(id);
+        if (user != null) {
+            user.setPassword("");
+            return Response.status(200).entity(user).build();
+        } else {
+            return Response.status(404).build();
+        }
+    }
 }
