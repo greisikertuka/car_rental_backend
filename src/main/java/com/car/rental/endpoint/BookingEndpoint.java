@@ -87,7 +87,7 @@ public class BookingEndpoint {
 
     @RolesAllowed({Role.USER, Role.ADMIN})
     @DELETE
-    @Path("/{id}")
+    @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
         bookingService.deleteBooking(id);
         return Response.status(201).build();
