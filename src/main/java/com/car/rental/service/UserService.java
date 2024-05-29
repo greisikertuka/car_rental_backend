@@ -1,6 +1,5 @@
 package com.car.rental.service;
 
-import com.car.rental.model.Booking;
 import com.car.rental.model.User;
 import com.car.rental.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +61,7 @@ public class UserService {
 
     @Transactional
     public void updateUser(User user) {
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         userRepository.getEntityManager().merge(user);
     }
 
