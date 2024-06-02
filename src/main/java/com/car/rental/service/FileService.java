@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -48,7 +49,27 @@ public class FileService {
         User user = userService.findUserById(Long.parseLong(userId));
         user.setProfilePicturePath(form.fileName);
         userService.updateUser(user);
-        return Response.status(Response.Status.OK).entity("{\"message\": \"Saved picture successfully!\"}").build();
+        return Response.status(Response.Status.OK).entity("{\"message\": \"Saved profile picture successfully!\"}").build();
+    }
+
+    public Response getCarThumbnail(String carId){
+        Car car = carService.findCarById(Long.parseLong(carId));
+        String thumbnailPath = car.getPicturePath();
+        String directoryPath = "uploaded-images/cars/" + carId + "/thumbnail/";
+        String fullPath = directoryPath + thumbnailPath;
+
+        File thumbnailFile = new File(fullPath);
+        if (!thumbnailFile.exists()) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Main picture file not found").build();
+        }
+
+        try {
+            Path imagePath = Paths.get(fullPath);
+            byte[] imageData = Files.readAllBytes(imagePath);
+            return Response.ok(imageData).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error reading image file").build();
+        }
     }
 
     public Response saveCarPicture(ImageUploadForm form, String carId) {
@@ -60,7 +81,7 @@ public class FileService {
         Car car = carService.findCarById(Long.parseLong(carId));
         car.setPicturePath(form.fileName);
         carService.updateCar(car);
-        return response;
+        return Response.status(Response.Status.OK).entity("{\"message\": \"Saved car picture successfully!\"}").build();
     }
 
     public Response saveImage(ImageUploadForm form, String directoryPath) {
@@ -98,7 +119,7 @@ public class FileService {
         return originalImage;
     }
 
-    public String uploadCarImages(MultipartFormDataInput input, String carId) {
+    public Response uploadCarImages(MultipartFormDataInput input, String carId) {
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         List<String> fileNames = new ArrayList<>();
 
@@ -130,7 +151,10 @@ public class FileService {
         } else {
             LOGGER.info("No parts found!");
         }
-        return String.join(", ", fileNames);
+        String uploadedCarImages = String.join(", ", fileNames);
+        String responseMessage = "All files " + uploadedCarImages + " uploaded successfully.";
+
+        return Response.status(Response.Status.OK).entity("{\"message\": \"" + responseMessage + "\"}").build();
     }
 
     private String getFileName(MultivaluedMap<String, String> header) {

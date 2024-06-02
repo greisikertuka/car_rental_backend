@@ -29,10 +29,19 @@ public class FileEndpoint {
         return fileService.saveUserProfilePicture(form, userId);
     }
 
+    @GET
+    @Path("/cars/{carId}/thumbnail")
+    @RolesAllowed({Role.USER, Role.ADMIN})
+    @Produces("image/jpeg")
+    public Response getCarThumbnail(@PathParam("carId") String carId) {
+        return fileService.getCarThumbnail(carId);
+    }
+
     @POST
     @Path("/cars/{carId}/thumbnail")
     @RolesAllowed({Role.ADMIN})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response uploadCarImage(@PathParam("carId") String carId, @MultipartForm ImageUploadForm form) {
         return fileService.saveCarPicture(form, carId);
     }
@@ -41,9 +50,8 @@ public class FileEndpoint {
     @Path("/cars/{carId}/photos")
     @RolesAllowed({Role.ADMIN})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response handleFileUploadForm(@PathParam("carId") String carId, @MultipartForm MultipartFormDataInput input) {
-        String uploadedCarImages = fileService.uploadCarImages(input, carId);
-        return Response.ok().entity("All files " + uploadedCarImages + " uploaded successfully.").build();
+        return fileService.uploadCarImages(input, carId);
     }
 }
