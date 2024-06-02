@@ -75,6 +75,10 @@ public class Car {
     @Column(name = "REVIEWS_COUNT")
     public int reviewsCount;
 
+    @Column(name = "PICTURE_PATH")
+    @NotNull
+    public String picturePath;
+
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Booking> bookings = new ArrayList<>();

@@ -35,6 +35,9 @@ public class User {
     @Column(name = "PASSWORD")
     public String password;
 
+    @Column(name = "PROFILE_PICTURE_PATH")
+    public String profilePicturePath;
+
     @Column(name = "ROLE")
     @Enumerated(EnumType.STRING)
     public Role role;

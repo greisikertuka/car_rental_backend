@@ -13,18 +13,20 @@ create table CARS
     LICENSE_PLATE  varchar(50)  not null,
     PRICE          float        not null,
     AVERAGE_RATING float,
-    REVIEWS_COUNT  int
+    REVIEWS_COUNT  int,
+    PICTURE_PATH varchar(100)
 );
 create table USERS
 (
-    ID        serial primary key,
-    NAME      varchar(100) not null,
-    LAST_NAME varchar(100) not null,
-    EMAIL     varchar(100) not null,
-    PHONE     varchar(100) not null,
-    USERNAME  varchar(100) not null,
-    PASSWORD  varchar(200) not null,
-    ROLE      varchar(50)  not null
+    ID              serial primary key,
+    NAME            varchar(100) not null,
+    LAST_NAME       varchar(100) not null,
+    EMAIL           varchar(100) not null,
+    PHONE           varchar(100) not null,
+    PROFILE_PICTURE_PATH varchar(100),
+    USERNAME        varchar(100) not null,
+    PASSWORD        varchar(200) not null,
+    ROLE            varchar(50)  not null
 );
 create table RATINGS
 (
@@ -40,10 +42,10 @@ create table RATINGS
 create table BOOKINGS
 (
     ID         serial primary key,
-    NAME      varchar(50) not null,
-    LAST_NAME varchar(50) not null,
-    EMAIL     varchar(50) not null,
-    PHONE     varchar(50) not null,
+    NAME       varchar(50)  not null,
+    LAST_NAME  varchar(50)  not null,
+    EMAIL      varchar(50)  not null,
+    PHONE      varchar(50)  not null,
     START_DATE date         not null,
     END_DATE   date         not null,
     TIMESTAMP  date         not null,

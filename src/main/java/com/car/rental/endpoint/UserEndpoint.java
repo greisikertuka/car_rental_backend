@@ -149,6 +149,7 @@ public class UserEndpoint {
         var user = userService.findUserById(id);
         if (user != null) {
             user.setPassword("");
+
             return Response.status(200).entity(user).build();
         } else {
             return Response.status(404).build();
