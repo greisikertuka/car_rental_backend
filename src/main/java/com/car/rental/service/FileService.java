@@ -40,19 +40,27 @@ public class FileService {
     CarService carService;
     public final static Logger LOGGER = Logger.getLogger(TokenService.class.getSimpleName());
 
-    public Response saveUserProfilePicture(ImageUploadForm form, String userId) {
-        String directory = "uploaded-images/users/" + userId + "/";
-        var response = this.saveImage(form, directory);
-        if (response.getStatusInfo() != Response.Status.OK) {
-            return response;
-        }
+
+    public Response getUserProfilePicture(String userId) {
         User user = userService.findUserById(Long.parseLong(userId));
-        user.setProfilePicturePath(form.fileName);
-        userService.updateUser(user);
-        return Response.status(Response.Status.OK).entity("{\"message\": \"Saved profile picture successfully!\"}").build();
+        String profilePicturePath = user.getProfilePicturePath();
+        String directoryPath = "uploaded-images/users/" + userId + "/";
+        String fullPath = directoryPath + profilePicturePath;
+
+        File thumbnailFile = new File(fullPath);
+        if (!thumbnailFile.exists()) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Profile picture file not found").build();
+        }
+        try {
+            Path imagePath = Paths.get(fullPath);
+            byte[] imageData = Files.readAllBytes(imagePath);
+            return Response.ok(imageData).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error reading image file").build();
+        }
     }
 
-    public Response getCarThumbnail(String carId){
+    public Response getCarThumbnail(String carId) {
         Car car = carService.findCarById(Long.parseLong(carId));
         String thumbnailPath = car.getPicturePath();
         String directoryPath = "uploaded-images/cars/" + carId + "/thumbnail/";
@@ -70,6 +78,18 @@ public class FileService {
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error reading image file").build();
         }
+    }
+
+    public Response saveUserProfilePicture(ImageUploadForm form, String userId) {
+        String directory = "uploaded-images/users/" + userId + "/";
+        var response = this.saveImage(form, directory);
+        if (response.getStatusInfo() != Response.Status.OK) {
+            return response;
+        }
+        User user = userService.findUserById(Long.parseLong(userId));
+        user.setProfilePicturePath(form.fileName);
+        userService.updateUser(user);
+        return Response.status(Response.Status.OK).entity("{\"message\": \"Saved profile picture successfully!\"}").build();
     }
 
     public Response saveCarPicture(ImageUploadForm form, String carId) {

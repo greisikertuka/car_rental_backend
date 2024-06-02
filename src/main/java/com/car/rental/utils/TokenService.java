@@ -16,7 +16,7 @@ public class TokenService {
     public final static Logger LOGGER = Logger.getLogger(TokenService.class.getSimpleName());
 
     // Access token expiration
-    private static final int ACCESS_TOKEN_EXPIRATION_MINUTES = 120;
+    private static final int ACCESS_TOKEN_EXPIRATION_MINUTES = 12000;
 
     // Refresh token expiration
 

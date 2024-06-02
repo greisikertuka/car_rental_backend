@@ -20,6 +20,14 @@ public class FileEndpoint {
     @Inject
     FileService fileService;
 
+    @GET
+    @Path("/users/{userId}/profile-picture")
+    @RolesAllowed({Role.USER, Role.ADMIN})
+    @Produces("image/jpeg")
+    public Response getUserProfilePicture(@PathParam("userId") String userId) {
+        return fileService.getUserProfilePicture(userId);
+    }
+
     @POST
     @Path("/users/{userId}/profile-picture")
     @RolesAllowed({Role.USER, Role.ADMIN})
