@@ -39,7 +39,6 @@ public class FileEndpoint {
 
     @GET
     @Path("/cars/{carId}/thumbnail")
-    @RolesAllowed({Role.USER, Role.ADMIN})
     @Produces("image/jpeg")
     public Response getCarThumbnail(@PathParam("carId") String carId) {
         return fileService.getCarThumbnail(carId);
