@@ -11,10 +11,12 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Slf4j
 @ApplicationScoped
 public class BookingService {
+    private static final Logger LOGGER = Logger.getLogger(BookingService.class.getSimpleName());
 
     @Inject
     UserRepository userRepository;
@@ -28,17 +30,21 @@ public class BookingService {
     public List<Booking> findBookingsByCarId(Long carId) {
         var car = carRepository.findById(carId);
         if (car == null) {
+            LOGGER.warning("No bookings found");
             throw new NotFoundException();
         }
+        LOGGER.info("Got bookings");
         return car.getBookings();
     }
 
     public List<Booking> findBookingsByUserId(Long userId) {
         var user = userRepository.findById(userId);
         if (user == null) {
+            LOGGER.warning("No user found with id:" + userId);
             throw new NotFoundException();
         }
         user.setPassword("");
+        LOGGER.info("Got bookings");
         return user.getBookings();
     }
 
@@ -46,11 +52,13 @@ public class BookingService {
     public void insertBooking(Long userId, Long carId, Booking booking) {
         var user = userRepository.findById(userId);
         if (user == null) {
+            LOGGER.warning("No user found with id:" + userId);
             throw new NotFoundException();
         }
 
         var car = carRepository.findById(carId);
         if (car == null) {
+            LOGGER.warning("No car found with id:" + carId);
             throw new NotFoundException();
         }
         booking.setCar(car);

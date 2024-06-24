@@ -11,12 +11,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response;     
 
 @Path("/files")
 @ApplicationScoped
 public class FileEndpoint {
-
     @Inject
     FileService fileService;
 

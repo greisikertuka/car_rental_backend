@@ -33,6 +33,7 @@ public class RatingService {
     public List<Rating> findRatingsByCarId(Long carId) {
         var car = carRepository.findById(carId);
         if (car == null) {
+
             throw new NotFoundException();
         }
         return car.getRatings();

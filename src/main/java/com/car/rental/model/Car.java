@@ -76,7 +76,6 @@ public class Car {
     public int reviewsCount;
 
     @Column(name = "PICTURE_PATH")
-    @NotNull
     public String picturePath;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)

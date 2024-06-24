@@ -27,18 +27,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 @Slf4j
 @ApplicationScoped
 public class FileService {
+    public final static Logger LOGGER = Logger.getLogger(TokenService.class.getSimpleName());
 
     @Inject
     UserService userService;
     @Inject
     CarService carService;
-    public final static Logger LOGGER = Logger.getLogger(TokenService.class.getSimpleName());
 
 
     public Response getUserProfilePicture(String userId) {
@@ -49,13 +51,17 @@ public class FileService {
 
         File thumbnailFile = new File(fullPath);
         if (!thumbnailFile.exists()) {
+            LOGGER.warning("No profile picture uploaded for user:" + userId);
+
             return Response.status(Response.Status.NOT_FOUND).entity("Profile picture file not found").build();
         }
         try {
             Path imagePath = Paths.get(fullPath);
             byte[] imageData = Files.readAllBytes(imagePath);
+            LOGGER.info("Got picture for user:" + userId);
             return Response.ok(imageData).build();
         } catch (Exception e) {
+            LOGGER.warning("Error reading image file:" + Arrays.toString(e.getStackTrace()));
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error reading image file").build();
         }
     }
@@ -68,14 +74,17 @@ public class FileService {
 
         File thumbnailFile = new File(fullPath);
         if (!thumbnailFile.exists()) {
+            LOGGER.warning("Main picture file not found for car:" + carId);
             return Response.status(Response.Status.NOT_FOUND).entity("Main picture file not found").build();
         }
 
         try {
             Path imagePath = Paths.get(fullPath);
             byte[] imageData = Files.readAllBytes(imagePath);
+            LOGGER.log(Level.INFO, "Got picture for car:" + carId);
             return Response.ok(imageData).build();
         } catch (Exception e) {
+            LOGGER.warning(Arrays.toString(e.getStackTrace()));
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error reading image file").build();
         }
     }
@@ -89,6 +98,7 @@ public class FileService {
         User user = userService.findUserById(Long.parseLong(userId));
         user.setProfilePicturePath(form.fileName);
         userService.updateUser(user);
+        LOGGER.log(Level.INFO, "Updated profile picture for user:" + userId);
         return Response.status(Response.Status.OK).entity("{\"message\": \"Saved profile picture successfully!\"}").build();
     }
 
@@ -101,6 +111,7 @@ public class FileService {
         Car car = carService.findCarById(Long.parseLong(carId));
         car.setPicturePath(form.fileName);
         carService.updateCar(car);
+        LOGGER.log(Level.INFO, "Uploaded thumbnail picture for car:" + carId);
         return Response.status(Response.Status.OK).entity("{\"message\": \"Saved car picture successfully!\"}").build();
     }
 
@@ -120,8 +131,9 @@ public class FileService {
             LOGGER.info(result ? "Directory created!" : "Directory exists!");
 
             File file = new File(directoryPath + form.fileName);
-            ImageIO.write(resizedImage, "jpg", file);
 
+            ImageIO.write(resizedImage, "jpg", file);
+            LOGGER.info("Uploaded file:" + file.getName());
             return Response.ok("File uploaded successfully").build();
         } catch (IOException e) {
             LOGGER.warning(e.getMessage());
@@ -134,8 +146,10 @@ public class FileService {
         int maxHeight = Constants.maxProfilePictureHeight;
 
         if (originalImage.getWidth() > maxWidth || originalImage.getHeight() > maxHeight) {
+            LOGGER.warning("Resizing image!");
             return Scalr.resize(originalImage, Scalr.Method.QUALITY, Scalr.Mode.AUTOMATIC, maxWidth, maxHeight);
         }
+        LOGGER.warning("Could not resize image!");
         return originalImage;
     }
 
@@ -173,6 +187,7 @@ public class FileService {
         }
         String uploadedCarImages = String.join(", ", fileNames);
         String responseMessage = "All files " + uploadedCarImages + " uploaded successfully.";
+        LOGGER.info(responseMessage);
 
         return Response.status(Response.Status.OK).entity("{\"message\": \"" + responseMessage + "\"}").build();
     }
@@ -182,9 +197,11 @@ public class FileService {
         for (String filename : contentDisposition) {
             if ((filename.trim().startsWith("filename"))) {
                 String[] name = filename.split("=");
+                LOGGER.info("Got File Name:" + filename);
                 return name[1].trim().replaceAll("\"", "");
             }
         }
+        LOGGER.warning("Could not get file name!");
         return "unknown";
     }
 }
