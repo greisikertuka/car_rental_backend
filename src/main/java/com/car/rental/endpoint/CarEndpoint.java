@@ -14,13 +14,11 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.logging.Logger;
 
 @Path("/cars")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class CarEndpoint {
-    private static final Logger LOGGER = Logger.getLogger(CarEndpoint.class.getSimpleName());
 
     @Inject
     CarService carService;

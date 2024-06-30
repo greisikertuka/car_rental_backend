@@ -41,9 +41,14 @@ public class UserService {
     public Response getUpdateProfileResponse(User user) {
         var fetcheduser = userRepository.findById(user.getId());
 
-        //user is editing his own profile
+        //user is editing his own profile without changing username
         if (fetcheduser.getUsername().equals(user.getUsername())) {
-            user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+            if (user.getPassword().isEmpty()) {
+                user.setPassword(fetcheduser.getPassword());
+            } else {
+                user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+            }
+
             userRepository.getEntityManager().merge(user);
             return Response.status(Response.Status.NO_CONTENT).entity("{\"message\": \"Updated user successfully!\"}").build();
         }
