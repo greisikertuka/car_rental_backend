@@ -90,7 +90,7 @@ public class BookingEndpoint {
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
         bookingService.deleteBooking(id);
-        return Response.status(201).build();
+        return Response.status(204).build();
     }
 
     @RolesAllowed({Role.USER, Role.ADMIN})

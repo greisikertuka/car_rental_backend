@@ -128,7 +128,7 @@ public class UserEndpoint {
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
         userService.deleteUser(id);
-        return Response.status(201).build();
+        return Response.status(204).build();
     }
 
     @RolesAllowed({com.car.rental.utils.Role.ADMIN})
